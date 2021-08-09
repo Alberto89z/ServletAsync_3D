@@ -5,6 +5,7 @@ import mx.edu.utez.service.ConnectionMySQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.InputStream;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -50,7 +51,6 @@ public class DaoGame {
         return ListGames;
     }
 
-
     public BeanGame findById(int id){
         BeanGame game = null;
         try{
@@ -81,7 +81,7 @@ public class DaoGame {
         return game;
     }
 
-    public boolean create(BeanGame game){
+    public boolean create(BeanGame game, InputStream image){
         boolean flag = false;
         try{
             con = ConnectionMySQL.getConnection();
@@ -89,7 +89,7 @@ public class DaoGame {
             cstm.setString(1,game.getNameGame());
             //cstm.setInt(2,game.getCategory_idCategory());
             cstm.setString(3,game.getDatePremiere());
-            cstm.setString(4,game.getImgGame());
+            cstm.setBlob(4, image);
             cstm.setInt(5,game.getStatus());
             flag = true;
         }catch (SQLException e){
@@ -99,6 +99,7 @@ public class DaoGame {
         }
         return flag;
     }
+
     public boolean update(BeanGame game){
         boolean flag = false;
         try{
@@ -119,6 +120,7 @@ public class DaoGame {
         }
         return flag;
     }
+
     public boolean delete(int idGame){
         boolean flag = false;
         try{
